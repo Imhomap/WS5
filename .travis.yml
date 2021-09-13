@@ -1,0 +1,39 @@
+language: android
+dist: trusty
+
+android:
+  components:
+    - tools-26.1.1
+    - platform-tools-31.0.2
+    - extra-google-google_play_services
+    - extra-google-m2repository
+    - extra-android-m2repository
+    - sys-img-armeabi-v7a-android-24
+  licenses:
+    - 'android-sdk-preview-license-52d11cd2'
+    - 'android-sdk-license-.+'
+    - 'google-gdk-license-.+'
+
+branches:
+  only:
+    - workshop5
+
+script:
+  - ./gradlew :spotlessApply
+  - ./gradlew build connectedAndroidTest
+
+before_script:
+  - android-wait-for-emulator
+  - adb shell settings put global window_animation_scale 0 &
+  - adb shell settings put global transition_animation_scale 0 &
+  - adb shell settings put global animator_duration_scale 0 &
+  - adb shell input keyevent 82 &
+
+before_install:
+  - touch $HOME/.android/repositories.cfg
+  - yes | sdkmanager "platforms;android-30"
+  - yes | sdkmanager "build-tools;31.0.0-rc5"
+  - sdkmanager tools
+  - sdkmanager "system-images;android-24;default;armeabi-v7a"
+  - echo no | avdmanager create avd --force -n emulatorApi28 -k "system-images;android-24;default;armeabi-v7a"
+  - $ANDROID_HOME/emulator/emulator -avd emulatorApi28 -no-audio -no-window &
