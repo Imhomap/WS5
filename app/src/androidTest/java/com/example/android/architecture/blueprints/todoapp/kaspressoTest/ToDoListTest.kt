@@ -33,6 +33,23 @@ class  ToDoListTest: TestCase() {
                 click()
             }
         }
+
+        ToDoListScreen{
+            todos.childAt<ToDoListScreen.ToDoItem>(2) {
+                toDoTitle {
+                    isDisplayed()
+                    hasText("MY MY MY TODO")
+                }
+                toDoCheckBox{
+                    isNotChecked()
+                }
+
+
+            }
+            todos{
+                hasSize(3)
+            }
+        }
     }
 
 
