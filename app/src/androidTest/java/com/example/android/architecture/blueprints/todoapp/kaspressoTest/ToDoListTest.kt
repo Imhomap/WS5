@@ -16,38 +16,42 @@ class  ToDoListTest: TestCase() {
 
     @Test
     fun checkAddToDo() = run {
-        ToDoListScreen{
-            addToo{
-                click()
-            }
-
+        step("Click on add TODO button") {
+            ToDoListScreen{
+                addToo{
+                    click()
+                }
         }
-        AddToDoScr{
-            title{
+        }
+        step("Creating a new TODO") {
+        AddToDoScr {
+            title {
                 replaceText("MY MY MY TODO")
             }
-            description{
+            description {
                 replaceText("BLA BLA BLA.....")
             }
-            saveButton{
+            saveButton {
                 click()
             }
         }
+        }
 
-        ToDoListScreen{
-            todos.childAt<ToDoListScreen.ToDoItem>(2) {
-                toDoTitle {
-                    isDisplayed()
-                    hasText("MY MY MY TODO")
+        step("Checking created TODO") {
+            ToDoListScreen {
+                todos.childAt<ToDoListScreen.ToDoItem>(2) {
+                    toDoTitle {
+                        isDisplayed()
+                        hasText("MY MY MY TODO")
+                    }
+                    toDoCheckBox {
+                        isNotChecked()
+                    }
+
                 }
-                toDoCheckBox{
-                    isNotChecked()
+                todos {
+                    hasSize(3)
                 }
-
-
-            }
-            todos{
-                hasSize(3)
             }
         }
     }
